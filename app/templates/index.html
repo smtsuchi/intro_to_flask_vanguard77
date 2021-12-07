@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>This is my Bike Shop</h1>
+<ul>
+    {% for item in my_list  %}
+        {% if item == "Shoha" %}
+            <li><b>{{ item }}</b></li>
+        {% else %}
+            <li>{{ item }}</li>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endblock content %}
