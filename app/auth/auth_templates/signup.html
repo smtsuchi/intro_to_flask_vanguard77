@@ -2,4 +2,29 @@
 
 {% block content %}
 <h1>This is signup page</h1>
+
+<form action="" method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        <fieldset>
+            {{ form.username.label }}
+            {{ form.username(class='form-control', placeholder='Username') }}
+        </fieldset>
+        <fieldset>
+            {{ form.email.label }}
+            {{ form.email(class='form-control', placeholder='Email') }}
+        </fieldset>
+        <fieldset>
+            {{ form.password.label }}
+            {{ form.password(class='form-control', placeholder='Password') }}
+        </fieldset>
+        <fieldset>
+            {{ form.confirm_password.label }}
+            {{ form.confirm_password(class='form-control', placeholder='Confirm Password') }}
+        </fieldset>
+        {{ form.submit(class='btn btn-primary') }}
+    </div>
+    
+</form>
+
 {% endblock content %}
