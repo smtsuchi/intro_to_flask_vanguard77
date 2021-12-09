@@ -27,9 +27,34 @@
                         <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
                 </li>
+
+
+                {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    <a class="nav-link" href="{{ url_for('blog.createPost') }}">Create Post</a>
                 </li>
+                <li class="nav-item">
+                    <p class="nav-link" >Hello, {{ current_user.username }}</p>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.logMeOut') }}">Log Out</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{{ url_for('auth.logMeIn') }}">Log In</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{{ url_for('auth.signMeUp') }}">Sign Up</a>
+                </li>
+
+                {% endif %}
+
+
+
+
+
+
+
             </ul>
             <form class="d-flex">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

@@ -3,18 +3,24 @@
 {% block content %}
 <h1>This is the login</h1>
 
-<form class="row g-3">
-    <div class="col-auto">
-      <label for="staticEmail2" class="visually-hidden">Email</label>
-      <input type="text" class="form-control-plaintext" id="staticEmail2" value="email@example.com">
+<form action="" method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        <fieldset>
+            {{ form.username.label }}
+            {{ form.username(class='form-control', placeholder='Username') }}
+        </fieldset>
+        <fieldset>
+            {{ form.password.label }}
+            {{ form.password(class='form-control', placeholder='Password') }}
+        </fieldset>
+        <fieldset>
+            {{ form.remember_me(class='form-check-input') }}
+            {{ form.remember_me.label(class='form-check-label') }}
+        </fieldset>
+        {{ form.submit(class='btn btn-primary') }}
     </div>
-    <div class="col-auto">
-      <label for="inputPassword2" class="visually-hidden">Password</label>
-      <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
-    </div>
-    <div class="col-auto">
-      <button type="submit" class="btn btn-primary btn-shoha mb-3">Login</button>
-    </div>
-  </form>
+    
+</form>
 
 {% endblock content %}

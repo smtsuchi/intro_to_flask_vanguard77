@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>This is teh Create Post page</h1>
+
+<form action="" method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        <fieldset>
+            {{ form.title.label }}
+            {{ form.title(class='form-control', placeholder='Title') }}
+        </fieldset>
+        <fieldset>
+            {{ form.image.label }}
+            {{ form.image(class='form-control', placeholder='Image Url') }}
+        </fieldset>
+        <fieldset>
+            {{ form.content.label }}
+            {{ form.content(class='form-control', placeholder='Type your caption here') }}
+        </fieldset>
+        {{ form.submit(class='btn btn-primary') }}
+    </div>
+    
+</form>
+
+{% endblock content %}
