@@ -4,6 +4,7 @@ from config import Config
 # import our blueprints for registration
 from .blog.routes import blog
 from .auth.routes import auth
+from .shop.routes import shop
 
 from .models import db, User
 # import database related
@@ -19,6 +20,7 @@ def load_user(user_id):
 
 app.register_blueprint(blog)
 app.register_blueprint(auth)
+app.register_blueprint(shop)
 
 app.config.from_object(Config)
 

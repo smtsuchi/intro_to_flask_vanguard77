@@ -10,7 +10,7 @@ blog = Blueprint('blog', __name__, template_folder='blog_templates')
 
 from app.models import db
 
-@blog.route('/posts')
+@blog.route('/')
 def blogHome():
     posts = Post.query.all()
     return render_template('blog.html', posts = posts)

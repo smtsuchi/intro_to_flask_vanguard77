@@ -3,7 +3,7 @@ from flask import render_template
 
 from flask_login import login_required
 
-@app.route('/')
+@app.route('/oldhome')
 def home():
     my_list = ['Shoha',"Josh", 'Dylan','Nicole']
     my_second_list = sorted(my_list)
