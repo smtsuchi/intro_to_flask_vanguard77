@@ -1,11 +1,35 @@
-from flask import Blueprint, render_template, redirect, url_for, jsonify
+from flask import Blueprint, render_template, redirect, url_for, jsonify, request
+from flask_login import login_required
 
 from app.models import Product
+from .forms import CreateProductForm
 
 # create instance of blueprint
 shop = Blueprint('shop', __name__, template_folder='shop_templates')
 
 from app.models import db
+
+@shop.route('/products/create', methods = ["GET","POST"])
+@login_required
+def createProduct():
+    form = CreateProductForm()
+    if request.method == "POST":
+        if form.validate():
+            
+            name = form.name.data
+            price = form.price.data
+            image = form.image.data
+            description = form.description.data
+
+            # create instance new post
+            product = Product(name, price, image, description)
+            # add instance to databse
+            db.session.add(product)
+            # commit to databse
+            db.session.commit()
+
+            return redirect(url_for('home'))
+    return render_template('createproduct.html', form = form)
 
 @shop.route('/shop')
 def allProducts():

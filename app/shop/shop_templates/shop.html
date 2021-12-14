@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>This is my Bike Shop</h1>
+
+<div class="row justify-content-center mt-4">
 {% for p in products %}
-<div class="container d-flex flex-row">
-    <a class="card " style="width: 18rem;" href='{{ url_for("shop.individualProduct", id=p.id) }}'>
+    <a class="card text-decoration-none text-dark" style="width: 18rem;" href='{{ url_for("shop.individualProduct", id=p.id) }}'>
         <img src="{{ p.image }}" class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title">{{ p.name }}</h5>
             <p class="card-text">{{ p.description }}</p>
-            <h3>{{ p.price }}</h3> <button class='btn btn-primary'>Add To Cart</button>
+            <h3>{{ p.price }}</h3> <button class='btn btn-secondary'>Add To Cart</button>
         </div>
     </a>
-</div>
 {% endfor %}
+</div>
 {% endblock content %}

@@ -55,3 +55,4 @@ class Product(db.Model):
             'description': self.description,
             "created_on": self.created_on
         }
+

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>This is the Create Product page</h1>
+
+<form action="" method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        <fieldset>
+            {{ form.name.label }}
+            {{ form.name(class='form-control', placeholder='Name') }}
+        </fieldset>
+        <fieldset>
+            {{ form.price.label }}
+            {{ form.price(class='form-control', placeholder='Price') }}
+        </fieldset>
+        <fieldset>
+            {{ form.image.label }}
+            {{ form.image(class='form-control', placeholder='Image Url') }}
+        </fieldset>
+        <fieldset>
+            {{ form.description.label }}
+            {{ form.description(class='form-control', placeholder='Type product description here') }}
+        </fieldset>
+        {{ form.submit(class='btn btn-primary') }}
+    </div>
+    
+</form>
+
+{% endblock content %}
