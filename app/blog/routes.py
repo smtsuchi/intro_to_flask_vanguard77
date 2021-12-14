@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 
 from .forms import CreatePostForm
 
-from app.models import Post, Pokemon, Ability
+from app.models import Post
 
 # create instance of blueprint
 blog = Blueprint('blog', __name__, template_folder='blog_templates')
