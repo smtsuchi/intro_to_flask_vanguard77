@@ -7,3 +7,9 @@ class CreatePostForm(FlaskForm):
     image = StringField('Image URL', validators=[DataRequired(),])
     content = StringField('Post Content', validators=[DataRequired(),])
     submit = SubmitField()
+
+class UpdatePostForm(FlaskForm):
+    title = StringField('Title')
+    image = StringField('Image URL')
+    content = StringField('Post Content')
+    submit = SubmitField()

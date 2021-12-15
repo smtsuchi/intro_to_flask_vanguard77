@@ -12,11 +12,13 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), nullable=False, unique=True)
     password = db.Column(db.String(256), nullable=False)
     post = db.relationship('Post', backref='author', lazy=True)
+    is_admin = db.Column(db.Boolean, default=False)
     
-    def __init__(self, username, email, password):
+    def __init__(self, username, email, password, is_admin = False):
         self.username = username
         self.email = email
         self.password = generate_password_hash(password)
+        self.is_admin = is_admin
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -56,3 +58,20 @@ class Product(db.Model):
             "created_on": self.created_on
         }
 
+class Pokemon(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False, unique=True)
+    image = db.Column(db.String())
+    ability = db.relationship('Ability', backref='pokemon', lazy=True)
+    def __init__(self, id, name, image):
+        self.id = id
+        self.name = name
+        self.image = image
+        
+class Ability(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False, unique=False)
+    pokemon_id = db.Column(db.Integer, db.ForeignKey('pokemon.id'), nullable=False)
+    def __init__(self, name, pokemon_id):
+        self.name = name
+        self.pokemon_id = pokemon_id

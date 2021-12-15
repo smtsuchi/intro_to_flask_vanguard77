@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, jsonify, request
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from app.models import Product
 from .forms import CreateProductForm
@@ -12,24 +12,27 @@ from app.models import db
 @shop.route('/products/create', methods = ["GET","POST"])
 @login_required
 def createProduct():
-    form = CreateProductForm()
-    if request.method == "POST":
-        if form.validate():
-            
-            name = form.name.data
-            price = form.price.data
-            image = form.image.data
-            description = form.description.data
+    if current_user.is_admin:
+        form = CreateProductForm()
+        if request.method == "POST":
+            if form.validate():
+                
+                name = form.name.data
+                price = form.price.data
+                image = form.image.data
+                description = form.description.data
 
-            # create instance new post
-            product = Product(name, price, image, description)
-            # add instance to databse
-            db.session.add(product)
-            # commit to databse
-            db.session.commit()
+                # create instance new post
+                product = Product(name, price, image, description)
+                # add instance to databse
+                db.session.add(product)
+                # commit to databse
+                db.session.commit()
 
-            return redirect(url_for('home'))
-    return render_template('createproduct.html', form = form)
+                return redirect(url_for('home'))
+        return render_template('createproduct.html', form = form)
+    else:
+        return redirect(url_for('blog.blogHome'))
 
 @shop.route('/shop')
 def allProducts():
