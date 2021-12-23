@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash, get_flashed_messages
 from werkzeug.security import check_password_hash
 
 # import forms and models
@@ -6,10 +6,15 @@ from .forms import LoginForm, UserInfoForm
 from app.models import User, Post
 
 # import login stuff
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_user, logout_user
+
+# import mail messaging stuff
+from flask_mail import Message, Mail
 
 # create instance of blueprint
 auth = Blueprint('auth', __name__, template_folder='auth_templates')
+
+mail = Mail()
 
 from app.models import db
 
@@ -26,11 +31,13 @@ def logMeIn():
         user = User.query.filter_by(username=username).first()
 
         if user is None or not check_password_hash(user.password, password):
+            flash('Incorrect username or password.', 'danger')
             return redirect(url_for('auth.logMeIn'))
         
         # log me in
         login_user(user, remember = remember_me)
-        print(current_user)
+        flash('You have successfully signed in', 'success')
+
         return redirect(url_for('home'))
 
     return render_template('login.html', form = form)
@@ -52,11 +59,22 @@ def signMeUp():
             # commit to databse
             db.session.commit()
 
+            msg = Message(
+                f"Welcome to Shoha's Bike Shop, {username}",
+                body="Thank you for joining our mailing list. We sell only the best bikes. Here's a coupon :]",
+                recipients=[email]
+            )
+
+            mail.send(msg)
+            
+
+            flash(f'You have successfully created a new user.. Welcome, {username}', 'success')
             return redirect(url_for('home'))
 
 
         else:
-            print('Not validated! :(')
+            flash(f'Unsuccessful attempt. Please double check and submit the form again', 'danger')
+            redirect(url_for('auth.signMeUp'))
     return render_template('signup.html', form = my_form )
 
 @auth.route('/logout')

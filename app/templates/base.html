@@ -15,7 +15,34 @@
     {% include 'nav.html' %}
 
       <main class="container main">
+        {% with messages = get_flashed_messages(with_categories = True) %}
+          {% if messages %}
+          <div class="shoha-floats-down-here">
+
+          
+            {% for category, message in messages %}
+            <div class="shoha-floats-down-here-child alert alert-{{ category }} alert-dismissible fade show mt-3" role="alert">
+              <strong>{{ message }}</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            {% endfor %}
+
+          </div>
+          {% endif %}
+        {% endwith %}
+        
+
+
+
+
           {% block content %}
+
+
+
+
+
+
 
           {% endblock content %}
       </main>

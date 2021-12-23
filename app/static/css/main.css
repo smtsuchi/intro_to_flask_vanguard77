@@ -17,3 +17,11 @@ footer {
 .main {
     margin-bottom: 50px;
 }
+
+.shoha-floats-down-here {
+    position: absolute;
+    top: 50px
+}
+.shoha-floats-down-here-child {
+    position: relative;
+}

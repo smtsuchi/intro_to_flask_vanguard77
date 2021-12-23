@@ -3,7 +3,7 @@ from config import Config
 
 # import our blueprints for registration
 from .blog.routes import blog
-from .auth.routes import auth
+from .auth.routes import auth, mail
 from .shop.routes import shop
 
 from .models import db, User
@@ -11,8 +11,12 @@ from .models import db, User
 from flask_migrate import Migrate
 from flask_login import LoginManager
 
+# Mail Sending stuff
+from flask_mail import Mail
+
 app = Flask(__name__)
 login = LoginManager()
+
 
 @login.user_loader
 def load_user(user_id):
@@ -27,6 +31,11 @@ app.config.from_object(Config)
 # initialize our databse to work with our app
 db.init_app(app)
 login.init_app(app)
+mail.init_app(app)
+
+login.login_view = 'auth.logMeIn'
+login.login_message = "Tough.. Please log in to access this page."
+login.login_message_category = 'danger'
 
 migrate = Migrate(app,db)
 
