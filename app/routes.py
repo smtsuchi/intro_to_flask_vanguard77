@@ -19,7 +19,7 @@ def test():
     return {'hi':'there'}
 
 @app.route('/new/api')
-def test():
+def test2():
     return {'students':[
         {
             "first_name": 'William',

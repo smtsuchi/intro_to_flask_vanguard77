@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, get_flashed_messages
+from flask import Blueprint, json, render_template, request, redirect, url_for, flash, get_flashed_messages, jsonify
 from werkzeug.security import check_password_hash
 
 # import forms and models
@@ -9,12 +9,12 @@ from app.models import User, Post
 from flask_login import login_user, logout_user
 
 # import mail messaging stuff
-from flask_mail import Message, Mail
+# from flask_mail import Message, Mail
 
 # create instance of blueprint
 auth = Blueprint('auth', __name__, template_folder='auth_templates')
 
-mail = Mail()
+# mail = Mail()
 
 from app.models import db
 
@@ -59,13 +59,13 @@ def signMeUp():
             # commit to databse
             db.session.commit()
 
-            msg = Message(
-                f"Welcome to Shoha's Bike Shop, {username}",
-                body="Thank you for joining our mailing list. We sell only the best bikes. Here's a coupon :]",
-                recipients=[email]
-            )
+            # msg = Message(
+            #     f"Welcome to Shoha's Bike Shop, {username}",
+            #     body="Thank you for joining our mailing list. We sell only the best bikes. Here's a coupon :]",
+            #     recipients=[email]
+            # )
 
-            mail.send(msg)
+            # mail.send(msg)
             
 
             flash(f'You have successfully created a new user.. Welcome, {username}', 'success')
@@ -81,3 +81,65 @@ def signMeUp():
 def logMeOut():
     logout_user()
     return redirect(url_for('auth.logMeIn'))
+
+
+@auth.route('/api/login', methods=["POST"])
+def apiLogin():
+    data = request.json
+    print(data)
+
+    username = data['username']
+    password = data['password']
+
+    user = User.query.filter_by(username=username).first()
+
+    if user is None or not check_password_hash(user.password, password):
+        return jsonify({
+            'status': 'error',
+            'message': "Incorrect username or password"
+        })
+    return jsonify({
+        'status': 'success',
+        'message': f"Welcome back, {username}",
+        "data": user.to_dict(),
+        "token": user.apitoken
+
+    })
+
+@auth.route('/api/register', methods=["POST"])
+def apiRegister():
+    data = request.json
+    print(data)
+
+    username = data['username']
+    email = data['email']
+    password = data['password']
+    confirm_pass = data['confirmPassword']
+
+    user = User.query.filter_by(username=username).first()
+    if user:
+        return jsonify({
+            'status': 'error',
+            'message': "User with that username already exists"
+        })
+    user = User.query.filter_by(email=email).first()
+    if user:
+        return jsonify({
+            'status': 'error',
+            'message': "User with that email already exists"
+        })
+
+    if password == confirm_pass:
+        u = User(username, email, password)
+
+        db.session.add(u)
+        db.session.commit()
+        return jsonify(
+            {
+                'status': 'success',
+                'data': u.to_dict(),
+                'message': f"Account successfully created for {username}"
+            }
+        )
+    
+    return {'status': 'error', "message": "Passwords do not match"} 

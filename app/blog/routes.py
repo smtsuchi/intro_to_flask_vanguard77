@@ -1,5 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, request
+from flask.json import jsonify
 from flask_login import current_user, login_required
+
+from app.apiauthhelper import token_required
 
 from .forms import CreatePostForm, UpdatePostForm
 
@@ -100,6 +103,7 @@ def createPost():
 
 @blog.route('/search/pokemon', methods = ['POST'])
 def searchPokemon():
+    
     if request.method == "POST":
         my_pokemon = request.form['poke']
         data = r.get(f'https://pokeapi.co/api/v2/pokemon/{my_pokemon}')
@@ -140,3 +144,11 @@ def searchPokemon():
             pokemon = ''
             return render_template('pokemon.html', pokemon = pokemon)
     return {'hi': 'there'}
+
+
+
+
+@blog.route('/api/posts')
+def apiBlogPosts():
+    posts = Post.query.all()
+    return jsonify([p.to_dict() for p in posts])

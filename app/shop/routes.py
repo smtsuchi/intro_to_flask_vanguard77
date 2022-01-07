@@ -46,7 +46,16 @@ def individualProduct(id):
         return redirect(url_for('shop.allProducts'))
     return render_template('product.html', p = product)
 
+    
+
 @shop.route('/api/shop/products')
 def allProductsAPI():
     products = Product.query.all()
     return jsonify([p.to_dict() for p in products])
+
+@shop.route('/api/shop/<int:id>')
+def individualProductAPI(id):
+    product = Product.query.filter_by(id=id).first()
+    if product is None:
+        return jsonify('none')
+    return jsonify(product.to_dict())

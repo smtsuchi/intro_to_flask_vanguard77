@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from werkzeug.security import generate_password_hash
 from flask_login import UserMixin
+from secrets import token_hex
 
 db = SQLAlchemy()
 
@@ -13,12 +14,22 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(256), nullable=False)
     post = db.relationship('Post', backref='author', lazy=True)
     is_admin = db.Column(db.Boolean, default=False)
+    apitoken = db.Column(db.String, default=None, nullable=True)
     
     def __init__(self, username, email, password, is_admin = False):
         self.username = username
         self.email = email
         self.password = generate_password_hash(password)
         self.is_admin = is_admin
+        self.apitoken = token_hex(15)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'token': self.apitoken
+        }
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,6 +44,16 @@ class Post(db.Model):
         self.image = image
         self.content = content
         self.user_id = user_id
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            "image": self.image,
+            "content": self.content,
+            "date_created": self.date_created,
+            "author": self.user_id
+        }
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
