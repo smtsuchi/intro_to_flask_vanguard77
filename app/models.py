@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), nullable=False, unique=True)
     password = db.Column(db.String(256), nullable=False)
     post = db.relationship('Post', backref='author', lazy=True)
+    cart_item = db.relationship('Cart', backref='cart_user', lazy=True)
     is_admin = db.Column(db.Boolean, default=False)
     apitoken = db.Column(db.String, default=None, nullable=True)
     
@@ -62,6 +63,7 @@ class Product(db.Model):
     image = db.Column(db.String())
     description = db.Column(db.String())
     created_on = db.Column(db.DateTime(), default=datetime.utcnow)
+    cart_item = db.relationship('Cart', backref='cart_product', lazy=True)
 
     def __init__(self, name, price, image, description):
         self.name = name
@@ -96,3 +98,12 @@ class Ability(db.Model):
     def __init__(self, name, pokemon_id):
         self.name = name
         self.pokemon_id = pokemon_id
+
+
+class Cart(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    def __init__(self, user_id, product_id):
+        self.user_id=user_id
+        self.product_id=product_id
